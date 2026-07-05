@@ -1,4 +1,4 @@
-package spring_boot_rest.spring_boot_rest;
+package spring_boot_rest.spring_boot_rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +24,15 @@ public class JobRestController {
         return service.getJob(postId);
     }
 
+
     @PostMapping("jobPost")
     public JobPost getJob(@RequestBody JobPost jobPost){
        service.addJob(jobPost);
        return service.getJob(jobPost.getPostId());
+    }
+    @GetMapping("jobPosts/keyword/{keyword}")
+    public List<JobPost> searchByKeyword(@PathVariable("keyword") String keyword){
+        return service.search(keyword);
     }
 
     @PutMapping("jobPost")
@@ -35,9 +40,14 @@ public class JobRestController {
         service.updateJob(jobPost);
         return service.getJob(jobPost.getPostId());
     }
-    @DeleteMapping
-    public String deleteJob(@PathVariable int postId){
+    @DeleteMapping("jobPost/{postId}")
+    public String deleteJob(@PathVariable("postId") int postId) {
         service.deleteJob(postId);
         return "Deleted";
+    }
+    @GetMapping("load")
+    public String loadData(){
+        service.load();
+        return "success";
     }
 }
