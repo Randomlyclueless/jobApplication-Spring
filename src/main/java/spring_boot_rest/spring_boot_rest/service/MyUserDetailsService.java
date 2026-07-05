@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import spring_boot_rest.spring_boot_rest.model.User;
 import spring_boot_rest.spring_boot_rest.repository.UserRepo;
 import spring_boot_rest.spring_boot_rest.model.UserPrincipal;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired

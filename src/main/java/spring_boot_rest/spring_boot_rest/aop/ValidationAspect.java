@@ -11,23 +11,26 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class ValidationAspect {
 
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ValidationAspect.class);
 
-    public static final Logger LOGGER=LoggerFactory.getLogger(ValidationAspect.class);
+    @Around("execution(* spring_boot_rest.spring_boot_rest.service.JobService.getJob(int)) && args(postId)")
+    public Object validateAndUpdate(
+            ProceedingJoinPoint jp,
+            int postId
+    ) throws Throwable {
 
+        LOGGER.info("ValidationAspect called with PostId: " + postId);
 
-    @Around("execution (* com.telusko.springbootrest.service.JobService.getJob(..)) && args(postId)")
-    public Object validateAndUpdate(ProceedingJoinPoint jp,int postId) throws Throwable {
-        if (postId<0) {
+        if (postId < 0) {
+
             LOGGER.info("PostId is negative, updating it");
 
-            postId=-postId;
-            LOGGER.info("new Value "+postId);
+            postId = Math.abs(postId);
+
+            LOGGER.info("New Value: " + postId);
         }
 
-        Object obj=jp.proceed(new Object[] {postId});
-
-
-
-        return obj;
+        return jp.proceed(new Object[]{postId});
     }
 }
